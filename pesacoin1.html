@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PesaCoin — Student Digital Wallet</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════
+   PESACOIN — AFRO-FUTURIST FINTECH AESTHETIC
+   Rich earth golds × deep forest greens × obsidian
+═══════════════════════════════════════════════ */
+
+:root {
+  --gold: #E8A217;
+  --gold-light: #F5C84A;
+  --gold-pale: #FDF0D0;
+  --gold-glow: rgba(232,162,23,0.2);
+  --gold-glow2: rgba(232,162,23,0.08);
+  --forest: #0F2318;
+  --forest2: #162D20;
+  --forest3: #1E3A2A;
+  --forest4: #274D38;
+  --forest5: #305A44;
+  --jade: #2ECC71;
+  --jade-dim: rgba(46,204,113,0.15);
+  --crimson: #E74C3C;
+  --crimson-dim: rgba(231,76,60,0.15);
+  --sky: #3498DB;
+  --sky-dim: rgba(52,152,219,0.15);
+  --amber: #F39C12;
+  --text: #F0F4F1;
+  --text-dim: #8FAD9A;
+  --text-muted: #4A6657;
+  --border: rgba(46,204,113,0.12);
+  --border2: rgba(232,162,23,0.15);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  --shadow-gold: 0 8px 40px rgba(232,162,23,0.25);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Cabinet Grotesk',sans-serif;
+  background:var(--forest);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--forest2);}
+::-webkit-scrollbar-thumb{background:var(--forest4);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+
+/* ── TYPOGRAPHY ── */
+.font-clash{font-family:'Clash Display',sans-serif;}
+.font-mono{font-family:'JetBrains Mono',monospace;}
+
+/* ══════════════════════════════════════════
+   GRAIN OVERLAY + AMBIENT GLOW
+══════════════════════════════════════════ */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.4;
+}
+
+.ambient{
+  position:fixed;pointer-events:none;z-index:0;
+  border-radius:50%;filter:blur(100px);
+}
+.ambient-1{
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(232,162,23,0.06),transparent 70%);
+  top:-200px;right:-200px;
+}
+.ambient-2{
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(46,204,113,0.05),transparent 70%);
+  bottom:-100px;left:-100px;
+}
+.ambient-3{
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(52,152,219,0.04),transparent 70%);
+  top:40%;left:40%;
+}
+
+/* ══════════════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════════════ */
+#auth-screen{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+  padding:24px;
+}
+
+.auth-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  max-width:1000px;width:100%;
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  animation:authIn 0.6s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes authIn{
+  from{opacity:0;transform:translateY(30px) scale(0.97);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+.auth-hero{
+  background:linear-gradient(150deg,var(--forest3) 0%,var(--forest2) 100%);
+  padding:56px 48px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.auth-hero::before{
+  content:'';
+  position:absolute;
+  width:320px;height:320px;
+  background:radial-gradient(circle,rgba(232,162,23,0.12),transparent 70%);
+  bottom:-80px;left:-80px;
+  border-radius:50%;
+}
+.auth-hero-pattern{
+  position:absolute;inset:0;opacity:0.04;
+  background-image:repeating-linear-gradient(45deg,var(--gold) 0,var(--gold) 1px,transparent 0,transparent 50%);
+  background-size:24px 24px;
+}
+
+.hero-logo{display:flex;align-items:center;gap:14px;margin-bottom:48px;position:relative;z-index:1;}
+.hero-logo-coin{
+  width:52px;height:52px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  box-shadow:0 8px 24px var(--gold-glow);
+  position:relative;
+}
+.hero-logo-coin::after{
+  content:'';
+  position:absolute;inset:2px;
+  border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:11px;
+}
+.hero-logo-name{font-family:'Clash Display',sans-serif;font-size:30px;font-weight:700;color:var(--gold-light);letter-spacing:-0.5px;}
+.hero-logo-tagline{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+.hero-stats{display:flex;flex-direction:column;gap:20px;position:relative;z-index:1;}
+.hero-stat-item{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  transition:all 0.2s;
+}
+.hero-stat-item:hover{border-color:var(--border2);background:rgba(232,162,23,0.04);}
+.hero-stat-icon{font-size:24px;width:44px;height:44px;background:var(--forest3);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.hero-stat-val{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;color:var(--gold-light);}
+.hero-stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+
+.auth-form-panel{padding:52px 44px;display:flex;flex-direction:column;justify-content:center;}
+.auth-tabs{display:flex;gap:0;background:var(--forest3);border-radius:12px;padding:4px;margin-bottom:36px;}
+.auth-tab{
+  flex:1;padding:10px;text-align:center;
+  border-radius:9px;cursor:pointer;
+  font-size:14px;font-weight:700;
+  color:var(--text-muted);
+  transition:all 0.2s;
+}
+.auth-tab.active{background:var(--gold);color:#000;}
+
+.auth-heading{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text);}
+.auth-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:32px;line-height:1.6;}
+
+.field{margin-bottom:18px;}
+.field label{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  color:var(--text-dim);
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:9px;
+}
+.field input,.field select,.field textarea{
+  width:100%;
+  background:var(--forest3);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 18px;
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px var(--gold-glow);
+  background:var(--forest2);
+}
+.field input::placeholder{color:var(--text-muted);}
+.field select{appearance:none;cursor:pointer;}
+.field textarea{resize:vertical;min-height:90px;line-height:1.6;}
+
+.err-msg{
+  background:var(--crimson-dim);
+  border:1px solid rgba(231,76,60,0.3);
+  color:#f0867a;
+  padding:12px 16px;
+  border-radius:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:8px;
+}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 24px;
+  border-radius:var(--radius-sm);
+  border:none;cursor:pointer;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:800;font-size:14px;
+  transition:all 0.2s cubic-bezier(.2,.8,.3,1);
+  letter-spacing:0.3px;
+  position:relative;overflow:hidden;
+}
+.btn::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(rgba(255,255,255,0.1),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.btn:hover::after{opacity:1;}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#000;width:100%;}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:var(--shadow-gold);}
+.btn-gold:active{transform:translateY(0);}
+.btn-ghost{background:var(--forest3);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--border2);background:var(--forest4);}
+.btn-jade{background:var(--jade-dim);color:var(--jade);border:1px solid rgba(46,204,113,0.25);}
+.btn-jade:hover{background:rgba(46,204,113,0.22);}
+.btn-crimson{background:var(--crimson-dim);color:#f0867a;border:1px solid rgba(231,76,60,0.25);}
+.btn-crimson:hover{background:rgba(231,76,60,0.22);}
+.btn-outline{background:transparent;color:var(--text-dim);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-sm{padding:9px 16px;font-size:12px;border-radius:8px;}
+.btn-xs{padding:6px 12px;font-size:11px;border-radius:6px;}
+
+.demo-hint{
+  margin-top:20px;
+  padding:14px 18px;
+  background:var(--forest3);
+  border:1px solid var(--border);
+  border-radius:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--text-muted);
+  line-height:2;
+}
+.demo-hint strong{color:var(--gold-light);}
+
+/* ══════════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════════ */
+#app-screen{display:none;min-height:100vh;}
+
+.app-layout{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:272px;
+  background:var(--forest2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:100;
+  transition:transform 0.3s cubic-bezier(.2,.8,.3,1);
+}
+
+.sidebar-logo{
+  padding:28px 24px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:13px;
+}
+.sidebar-coin{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 4px 16px var(--gold-glow);
+  flex-shrink:0;
+}
+.sidebar-name{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;color:var(--gold-light);letter-spacing:-0.3px;}
+.sidebar-ver{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1.5px;}
+
+.sidebar-nav{flex:1;padding:20px 14px;overflow-y:auto;}
+.nav-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--text-muted);
+  padding:0 10px;margin-bottom:8px;margin-top:20px;
+}
+.nav-label:first-child{margin-top:0;}
+.nav-item{
+  display:flex;align-items:center;gap:13px;
+  padding:12px 14px;
+  border-radius:12px;cursor:pointer;
+  color:var(--text-dim);
+  font-size:14px;font-weight:700;
+  transition:all 0.15s;
+  margin-bottom:2px;
+  position:relative;
+}
+.nav-item:hover{background:var(--forest3);color:var(--text);}
+.nav-item.active{
+  background:linear-gradient(90deg,var(--gold-glow2),var(--forest3));
+  color:var(--gold-light);
+  border:1px solid var(--border2);
+}
+.nav-item.active .nav-icon-wrap{background:var(--gold-glow);}
+.nav-icon-wrap{
+  width:34px;height:34px;
+  background:var(--forest3);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  transition:background 0.2s;
+  flex-shrink:0;
+}
+.nav-badge{
+  margin-left:auto;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  color:#000;
+  font-size:10px;font-weight:900;
+  padding:2px 8px;
+  border-radius:20px;
+  font-family:'JetBrains Mono',monospace;
+}
+
+.sidebar-footer{
+  padding:20px 24px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.sidebar-avatar{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:900;color:#000;
+  flex-shrink:0;
+}
+.sidebar-user-name{font-size:14px;font-weight:800;}
+.sidebar-user-role{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+.sidebar-logout{
+  margin-left:auto;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:8px;
+  cursor:pointer;color:var(--text-muted);
+  transition:all 0.2s;
+  font-size:16px;
+}
+.sidebar-logout:hover{background:var(--crimson-dim);color:#f0867a;}
+
+/* ── TOPBAR ── */
+.main-content{margin-left:272px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{
+  padding:18px 36px;
+  background:rgba(15,35,24,0.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{
+  font-family:'Clash Display',sans-serif;
+  font-size:22px;font-weight:700;flex:1;
+  color:var(--text);
+}
+.balance-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 20px;
+  background:var(--forest3);
+  border:1px solid var(--border2);
+  border-radius:100px;
+  cursor:default;
+  transition:all 0.2s;
+}
+.balance-pill:hover{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+.balance-pill-icon{font-size:16px;}
+.balance-pill-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:17px;font-weight:700;
+  color:var(--gold-light);
+}
+.balance-pill-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+/* ── PAGE CONTENT ── */
+.page-content{padding:36px;flex:1;animation:pageIn 0.35s ease both;}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════ */
+.card{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:26px;
+  position:relative;
+  overflow:hidden;
+}
+.card-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:16px;
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:28px;
+}
+.stat-card{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  position:relative;overflow:hidden;
+  transition:all 0.25s cubic-bezier(.2,.8,.3,1);
+  cursor:default;
+}
+.stat-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-4px);
+  box-shadow:0 20px 48px rgba(0,0,0,0.4);
+}
+.stat-card::before{
+  content:attr(data-icon);
+  position:absolute;right:-8px;bottom:-12px;
+  font-size:80px;opacity:0.06;
+  pointer-events:none;
+}
+.stat-card-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:12px;
+}
+.stat-card-val{
+  font-family:'Clash Display',sans-serif;
+  font-size:38px;font-weight:700;
+  letter-spacing:-1.5px;line-height:1;
+  margin-bottom:8px;
+}
+.stat-card-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+.val-gold{color:var(--gold-light);}
+.val-jade{color:var(--jade);}
+.val-sky{color:var(--sky);}
+.val-amber{color:var(--amber);}
+
+/* ACTIONS */
+.actions-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:28px;
+}
+.action-card{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px 20px;
+  cursor:pointer;
+  transition:all 0.25s cubic-bezier(.2,.8,.3,1);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  text-align:center;
+}
+.action-card:hover{transform:translateY(-5px);}
+.action-card.market:hover{border-color:rgba(52,152,219,0.4);box-shadow:0 16px 48px rgba(52,152,219,0.12);}
+.action-card.send:hover{border-color:rgba(231,76,60,0.4);box-shadow:0 16px 48px rgba(231,76,60,0.12);}
+.action-card.receive:hover{border-color:rgba(46,204,113,0.4);box-shadow:0 16px 48px rgba(46,204,113,0.12);}
+.action-card.upload:hover{border-color:rgba(232,162,23,0.4);box-shadow:0 16px 48px rgba(232,162,23,0.12);}
+.action-icon{
+  width:56px;height:56px;
+  background:var(--forest3);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+  transition:all 0.2s;
+}
+.action-card:hover .action-icon{transform:scale(1.1);}
+.action-card.market:hover .action-icon{background:var(--sky-dim);}
+.action-card.send:hover .action-icon{background:var(--crimson-dim);}
+.action-card.receive:hover .action-icon{background:var(--jade-dim);}
+.action-card.upload:hover .action-icon{background:var(--gold-glow);}
+.action-label{font-size:13px;font-weight:800;color:var(--text);}
+.action-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+/* DASHBOARD GRID */
+.dash-grid{display:grid;grid-template-columns:1fr 380px;gap:24px;}
+
+/* TX LIST */
+.tx-list{display:flex;flex-direction:column;}
+.tx-item{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+  transition:all 0.15s;
+}
+.tx-item:last-child{border-bottom:none;padding-bottom:0;}
+.tx-item:hover{padding-left:4px;}
+.tx-icon-wrap{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.tx-icon-in{background:var(--jade-dim);}
+.tx-icon-out{background:var(--crimson-dim);}
+.tx-icon-buy{background:var(--sky-dim);}
+.tx-desc{flex:1;min-width:0;}
+.tx-note{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tx-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:3px;}
+.tx-amt{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;white-space:nowrap;}
+.tx-amt-in{color:var(--jade);}
+.tx-amt-out{color:#f0867a;}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.section-title{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;}
+.section-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+
+/* FEATURED LIST */
+.feat-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:padding 0.15s;
+}
+.feat-item:last-child{border-bottom:none;padding-bottom:0;}
+.feat-item:hover{padding-left:4px;}
+.feat-cover{
+  width:48px;height:48px;background:var(--forest3);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.feat-info{flex:1;min-width:0;}
+.feat-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feat-cat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;}
+.feat-price{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--gold-light);white-space:nowrap;}
+
+/* ══════════════════════════════════════════
+   WALLET PAGE
+══════════════════════════════════════════ */
+.wallet-hero{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:44px;
+  margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.wallet-hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(232,162,23,0.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+.wallet-hero::after{
+  content:'₿';
+  position:absolute;right:-30px;bottom:-50px;
+  font-size:220px;font-weight:900;
+  color:var(--gold);opacity:0.03;
+  line-height:1;
+  pointer-events:none;
+}
+.wallet-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:14px;
+}
+.wallet-balance{
+  font-family:'Clash Display',sans-serif;
+  font-size:68px;font-weight:700;
+  color:var(--gold-light);
+  letter-spacing:-3px;line-height:1;
+}
+.wallet-bal-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:15px;color:var(--text-dim);
+  margin-top:10px;
+}
+.wallet-btns{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;}
+.wallet-btns .btn{flex:1;min-width:140px;}
+
+/* ══════════════════════════════════════════
+   MARKETPLACE
+══════════════════════════════════════════ */
+.market-search{
+  display:flex;align-items:center;gap:12px;
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px 20px;
+  margin-bottom:20px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.market-search:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+.market-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;}
+.market-search input::placeholder{color:var(--text-muted);}
+.search-icon{font-size:18px;color:var(--text-muted);}
+
+.filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.chip{
+  padding:7px 18px;border-radius:100px;
+  border:1px solid var(--border);
+  background:var(--forest3);
+  color:var(--text-dim);
+  font-size:12px;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  white-space:nowrap;
+}
+.chip:hover,.chip.active{border-color:var(--gold);color:var(--gold-light);background:var(--gold-glow2);}
+
+.materials-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+  gap:20px;
+}
+.mat-card{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:all 0.25s cubic-bezier(.2,.8,.3,1);
+  cursor:pointer;
+}
+.mat-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-5px);
+  box-shadow:0 24px 56px rgba(0,0,0,0.45);
+}
+.mat-cover{
+  height:130px;background:var(--forest3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:58px;position:relative;
+}
+.mat-badge{
+  position:absolute;top:12px;right:12px;
+  background:var(--forest4);border-radius:8px;
+  padding:4px 12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-dim);
+  border:1px solid var(--border);
+}
+.mat-body{padding:20px;}
+.mat-title{font-size:15px;font-weight:800;margin-bottom:5px;line-height:1.3;}
+.mat-seller{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:10px;}
+.mat-desc{font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;display:-webkit-box;.mat-desc{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  line-clamp:2;           /* ← add this */
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+};-webkit-box-orient:vertical;overflow:hidden;}
+.mat-footer{display:flex;align-items:center;justify-content:space-between;}
+.mat-price{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;color:var(--gold-light);}
+.mat-price span{font-size:11px;color:var(--text-muted);font-weight:400;}
+.mat-dl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+/* ══════════════════════════════════════════
+   LIBRARY
+══════════════════════════════════════════ */
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+.lib-card{
+  background:var(--forest2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:all 0.2s;
+}
+.lib-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.35);}
+.lib-icon{font-size:40px;}
+.lib-title{font-size:15px;font-weight:800;line-height:1.3;}
+.lib-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+.lib-actions{margin-top:auto;display:flex;gap:8px;}
+
+/* ══════════════════════════════════════════
+   PROFILE
+══════════════════════════════════════════ */
+.profile-hero{
+  background:var(--forest2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:36px;
+  display:flex;align-items:center;gap:28px;
+  margin-bottom:24px;position:relative;overflow:hidden;
+}
+.profile-hero::before{
+  content:'';position:absolute;
+  width:300px;height:300px;
+  background:radial-gradient(circle,var(--gold-glow2),transparent 70%);
+  right:-80px;top:-80px;
+  border-radius:50%;pointer-events:none;
+}
+.profile-avatar-lg{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#000;
+  flex-shrink:0;
+  box-shadow:0 8px 24px var(--gold-glow);
+}
+.profile-name{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;margin-bottom:5px;}
+.profile-email{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
+.profile-stats-row{display:flex;gap:36px;margin-top:18px;}
+.ps-val{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--gold-light);}
+.ps-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+/* ══════════════════════════════════════════
+   ADMIN
+══════════════════════════════════════════ */
+.admin-tabs{display:flex;gap:8px;margin-bottom:24px;}
+.admin-tab{
+  padding:10px 20px;border-radius:10px;cursor:pointer;
+  font-size:13px;font-weight:700;
+  background:var(--forest3);color:var(--text-dim);
+  border:1px solid var(--border);
+  transition:all 0.15s;
+}
+.admin-tab.active{background:var(--gold);color:#000;border-color:var(--gold);}
+
+table{width:100%;border-collapse:collapse;}
+th{
+  text-align:left;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-muted);
+  padding:10px 16px;border-bottom:1px solid var(--border);
+}
+td{
+  padding:15px 16px;border-bottom:1px solid var(--border);
+  font-size:13px;vertical-align:middle;
+}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+
+/* ══════════════════════════════════════════
+   BADGES
+══════════════════════════════════════════ */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 11px;border-radius:100px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;
+}
+.badge-gold{background:rgba(232,162,23,0.12);color:var(--gold-light);border:1px solid rgba(232,162,23,0.25);}
+.badge-jade{background:var(--jade-dim);color:var(--jade);border:1px solid rgba(46,204,113,0.25);}
+.badge-crimson{background:var(--crimson-dim);color:#f0867a;border:1px solid rgba(231,76,60,0.25);}
+
+/* ══════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(8,20,14,0.85);
+  backdrop-filter:blur(12px);
+  z-index:500;
+  display:none;align-items:center;justify-content:center;
+  padding:24px;
+}
+.modal-overlay.open{display:flex;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:40px;
+  width:100%;max-width:500px;
+  max-height:90vh;overflow-y:auto;
+  animation:modalIn 0.3s cubic-bezier(.2,.8,.3,1) both;
+  position:relative;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-title{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;margin-bottom:6px;}
+.modal-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:30px;line-height:1.5;}
+.modal-close{
+  position:absolute;top:20px;right:20px;
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-muted);
+  background:var(--forest3);font-size:18px;
+  transition:all 0.15s;border:none;
+}
+.modal-close:hover{background:var(--crimson-dim);color:#f0867a;}
+.modal-actions{display:flex;gap:12px;margin-top:26px;}
+
+.info-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 0;border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+}
+.info-row:last-child{border-bottom:none;}
+.info-row-label{color:var(--text-muted);}
+.info-row-val{font-weight:700;}
+
+/* ══════════════════════════════════════════
+   WALLET ADDRESS CARD
+══════════════════════════════════════════ */
+.wallet-addr-card{
+  background:var(--forest3);border:1px solid var(--border2);
+  border-radius:16px;padding:32px;text-align:center;
+  margin-bottom:22px;position:relative;overflow:hidden;
+}
+.wallet-addr-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 100%,var(--gold-glow),transparent 60%);
+}
+.wallet-addr-icon{font-size:48px;margin-bottom:16px;display:block;position:relative;}
+.wallet-addr{
+  font-family:'JetBrains Mono',monospace;
+  font-size:16px;font-weight:700;
+  color:var(--gold-light);letter-spacing:2px;
+  word-break:break-all;position:relative;
+}
+.wallet-addr-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:10px;position:relative;}
+
+/* ══════════════════════════════════════════
+   UPLOAD ZONE
+══════════════════════════════════════════ */
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:12px;padding:28px;text-align:center;
+  cursor:pointer;transition:all 0.2s;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--text-muted);font-size:12px;
+}
+.upload-zone:hover{border-color:var(--gold);color:var(--gold-light);background:var(--gold-glow2);}
+.upload-zone-icon{font-size:28px;display:block;margin-bottom:10px;}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+.toast-container{
+  position:fixed;bottom:32px;right:32px;
+  z-index:1000;display:flex;flex-direction:column;gap:10px;
+}
+.toast{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:15px 22px;
+  display:flex;align-items:center;gap:13px;
+  font-size:14px;font-weight:600;
+  min-width:300px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.5);
+  animation:toastIn 0.35s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+.toast-s{border-left:3px solid var(--jade);}
+.toast-e{border-left:3px solid #f0867a;}
+.toast-i{border-left:3px solid var(--gold);}
+.toast-icon{font-size:20px;}
+
+/* ══════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════ */
+.empty-state{
+  text-align:center;padding:72px 24px;
+  color:var(--text-muted);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+}
+.empty-icon{font-size:56px;display:block;margin-bottom:18px;opacity:0.5;}
+
+/* ══════════════════════════════════════════
+   PULSE ANIMATION
+══════════════════════════════════════════ */
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+.pulse{animation:pulse 2s ease-in-out infinite;}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .actions-row{grid-template-columns:repeat(2,1fr);}
+  .dash-grid{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+  .auth-wrap{grid-template-columns:1fr;}
+  .auth-hero{display:none;}
+  .sidebar{transform:translateX(-100%);}
+  .main-content{margin-left:0;}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .actions-row{grid-template-columns:1fr 1fr;}
+  .page-content{padding:18px;}
+  .topbar{padding:14px 18px;}
+  .wallet-balance{font-size:44px;}
+}
+</style>
+</head>
+<body>
+
+<!-- AMBIENT GLOWS -->
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+<div class="ambient ambient-3"></div>
+
+<!-- ══════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-wrap">
+    <!-- Hero Panel -->
+    <div class="auth-hero">
+      <div class="auth-hero-pattern"></div>
+      <div class="hero-logo">
+        <div class="hero-logo-coin">🪙</div>
+        <div>
+          <div class="hero-logo-name">PesaCoin</div>
+          <div class="hero-logo-tagline">Student Digital Wallet</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <div class="hero-stat-icon">🎓</div>
+          <div>
+            <div class="hero-stat-val">4,200+</div>
+            <div class="hero-stat-label">STUDENTS ENROLLED</div>
+          </div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-icon">📚</div>
+          <div>
+            <div class="hero-stat-val">1,850+</div>
+            <div class="hero-stat-label">STUDY MATERIALS</div>
+          </div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-icon">💰</div>
+          <div>
+            <div class="hero-stat-val">2.4M PC</div>
+            <div class="hero-stat-label">TOTAL EXCHANGED</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
+      </div>
+      <div id="auth-login-view">
+        <div class="auth-heading">Welcome back 👋</div>
+        <div class="auth-sub">Sign in to access your PesaCoin wallet<br>and academic marketplace.</div>
+        <div id="login-err"></div>
+        <div class="field"><label>Email Address</label><input id="login-email" type="email" placeholder="you@university.ac" autocomplete="email"/></div>
+        <div class="field"><label>Password</label><input id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <button class="btn btn-gold" onclick="doLogin()">Sign In →</button>
+        <div class="demo-hint">
+          <strong>Demo accounts:</strong><br>
+          admin@pesacoin.ac / admin123 &nbsp;(Admin)<br>
+          amara@uni.ac / pass123 &nbsp;(Student)<br>
+          kofi@uni.ac / pass123 &nbsp;(Student)
+        </div>
+      </div>
+      <div id="auth-reg-view" style="display:none;">
+        <div class="auth-heading">Join PesaCoin ✨</div>
+        <div class="auth-sub">Create your account and earn<br><strong style="color:var(--gold-light)">500 PC</strong> welcome bonus instantly.</div>
+        <div id="reg-err"></div>
+        <div class="field"><label>Full Name</label><input id="reg-name" placeholder="Amara Osei"/></div>
+        <div class="field"><label>Email Address</label><input id="reg-email" type="email" placeholder="you@university.ac"/></div>
+        <div class="field"><label>Password</label><input id="reg-pass" type="password" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')doRegister()"/></div>
+        <button class="btn btn-gold" onclick="doRegister()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP SCREEN
+══════════════════════════════════════ -->
+<div id="app-screen">
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-coin">🪙</div>
+        <div>
+          <div class="sidebar-name">PesaCoin</div>
+          <div class="sidebar-ver">v2.0 · BETA</div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-label">Main</div>
+        <div class="nav-item active" onclick="goPage('dashboard')" id="nav-dashboard">
+          <div class="nav-icon-wrap">🏠</div>Dashboard
+        </div>
+        <div class="nav-item" onclick="goPage('wallet')" id="nav-wallet">
+          <div class="nav-icon-wrap">💰</div>Wallet
+        </div>
+        <div class="nav-item" onclick="goPage('marketplace')" id="nav-marketplace">
+          <div class="nav-icon-wrap">🛒</div>Marketplace
+        </div>
+        <div class="nav-item" onclick="goPage('library')" id="nav-library">
+          <div class="nav-icon-wrap">📚</div>My Library
+        </div>
+        <div class="nav-label">Account</div>
+        <div class="nav-item" onclick="goPage('profile')" id="nav-profile">
+          <div class="nav-icon-wrap">👤</div>Profile
+        </div>
+        <div class="nav-item" onclick="goPage('admin')" id="nav-admin" style="display:none;">
+          <div class="nav-icon-wrap">🛡️</div>Admin Panel
+          <span class="nav-badge" id="admin-badge" style="display:none">0</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-avatar" id="sidebar-avatar"></div>
+        <div>
+          <div class="sidebar-user-name" id="sidebar-uname"></div>
+          <div class="sidebar-user-role" id="sidebar-urole"></div>
+        </div>
+        <div class="sidebar-logout" onclick="doLogout()" title="Log out">⏻</div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="balance-pill">
+          <span class="balance-pill-icon">🪙</span>
+          <span class="balance-pill-val font-mono" id="topbar-bal">0</span>
+          <span class="balance-pill-label">PC</span>
+        </div>
+      </div>
+      <div class="page-content" id="page-content"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODALS
+══════════════════════════════════════ -->
+
+<!-- SEND MODAL -->
+<div class="modal-overlay" id="modal-send">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-send')">✕</button>
+    <div class="modal-title">📤 Send PesaCoins</div>
+    <div class="modal-sub">Transfer coins to another student instantly.</div>
+    <div id="send-err"></div>
+    <div class="field"><label>Recipient</label>
+      <select id="send-to"></select>
+    </div>
+    <div class="field"><label>Amount (PC)</label>
+      <input type="number" id="send-amount" placeholder="100" min="1"/>
+    </div>
+    <div class="field"><label>Note (optional)</label>
+      <input id="send-note" placeholder="e.g. Thanks for the tutoring session!"/>
+    </div>
+    <div class="info-row" style="background:var(--forest3);border-radius:10px;padding:14px 16px;margin-top:4px;">
+      <span class="info-row-label">Balance after transfer</span>
+      <span class="info-row-val val-jade" id="send-after">— PC</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-send')">Cancel</button>
+      <button class="btn btn-gold" style="flex:2" onclick="doSend()">Send Coins →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIVE MODAL -->
+<div class="modal-overlay" id="modal-receive">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-receive')">✕</button>
+    <div class="modal-title">📥 Receive PesaCoins</div>
+    <div class="modal-sub">Share your unique wallet address to receive funds.</div>
+    <div class="wallet-addr-card">
+      <span class="wallet-addr-icon">🪙</span>
+      <div class="wallet-addr" id="receive-addr"></div>
+      <div class="wallet-addr-label">Your PesaCoin Wallet Address</div>
+    </div>
+    <button class="btn btn-gold" onclick="copyAddr()">📋 Copy Address</button>
+    <div style="text-align:center;margin-top:14px;">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-receive')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay" id="modal-upload">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-upload')">✕</button>
+    <div class="modal-title">📤 Upload Study Material</div>
+    <div class="modal-sub">Submit your resource for admin review.<br>Once approved, students can purchase it.</div>
+    <div id="upload-err"></div>
+    <div class="field"><label>Title *</label><input id="ul-title" placeholder="e.g. Advanced Calculus Complete Notes"/></div>
+    <div class="field"><label>Category *</label>
+      <select id="ul-cat">
+        <option>Mathematics</option><option>Chemistry</option><option>Physics</option>
+        <option>Biology</option><option>Computer Science</option><option>Economics</option>
+        <option>History</option><option>Literature</option><option>Other</option>
+      </select>
+    </div>
+    <div class="field"><label>Price (PC) *</label><input type="number" id="ul-price" placeholder="80" min="1"/></div>
+    <div class="field"><label>Description *</label><textarea id="ul-desc" placeholder="What will students learn? Include key topics covered..."></textarea></div>
+    <div class="field"><label>File Upload (Simulated)</label>
+      <div class="upload-zone" onclick="simulateUpload()" id="upload-zone">
+        <span class="upload-zone-icon">📁</span>
+        <span id="upload-zone-text">Click to select file (PDF, DOCX, PPTX)</span>
+      </div>
+    </div>
+    <div style="background:var(--gold-glow2);border:1px solid var(--border2);border-radius:10px;padding:13px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-light);margin-bottom:4px;">
+      ⚠️ All materials are reviewed by admins before appearing in marketplace.
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-upload')">Cancel</button>
+      <button class="btn btn-gold" style="flex:2" onclick="doUpload()">Submit for Review →</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUY MODAL -->
+<div class="modal-overlay" id="modal-buy">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-buy')">✕</button>
+    <div class="modal-title">🛒 Confirm Purchase</div>
+    <div class="modal-sub">Review the details before completing your purchase.</div>
+    <div id="buy-mat-preview" style="background:var(--forest3);border-radius:14px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:22px;"></div>
+    <div class="info-row"><span class="info-row-label">Material Price</span><span class="info-row-val val-gold" id="buy-price-display"></span></div>
+    <div class="info-row"><span class="info-row-label">Your Current Balance</span><span class="info-row-val" id="buy-curr-bal"></span></div>
+    <div class="info-row"><span class="info-row-label">Balance After Purchase</span><span class="info-row-val" id="buy-after-bal"></span></div>
+    <div id="buy-err" style="margin-top:12px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-buy')">Cancel</button>
+      <button class="btn btn-gold" style="flex:2" id="buy-confirm-btn" onclick="confirmBuy()">Confirm Purchase</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  DATA STORE
+// ══════════════════════════════════════════
+const COVERS = {
+  Mathematics:'📐',Chemistry:'⚗️',Physics:'⚡',Biology:'🧬',
+  'Computer Science':'💻',Economics:'📊',History:'🏛️',Literature:'📖',Other:'📄'
+};
+
+const API = "http://127.0.0.1:8000";
+let TOKEN = localStorage.getItem("pc_token");
+
+const req = async (method, path, body = null, isForm = false) => {
+  const headers = { Authorization: `Bearer ${TOKEN}` };
+  if (!isForm) headers["Content-Type"] = "application/json";
+  const res = await fetch(API + path, {
+    method, headers,
+    body: isForm ? body : body ? JSON.stringify(body) : null,
+  });
+  if (!res.ok) throw await res.json();
+  return res.json();
+};
+
+// Auth
+const login = (email, password) =>
+  req("POST", "/auth/login", { email, password })
+    .then(d => { TOKEN = d.token; localStorage.setItem("pc_token", TOKEN); return d; });
+
+const register = (name, email, password) =>
+  req("POST", "/auth/register", { name, email, password })
+    .then(d => { TOKEN = d.token; localStorage.setItem("pc_token", TOKEN); return d; });
+
+// Avatar upload
+const uploadAvatar = async (file) => {
+  const fd = new FormData();
+  fd.append("file", file);
+  return req("POST", "/auth/me/avatar", fd, true);
+};
+
+// Wallet
+const sendCoins = (to_user_id, amount, note) =>
+  req("POST", "/wallet/send", { to_user_id, amount, note });
+
+const getTransactions = () => req("GET", "/wallet/transactions");
+const getUsers = () => req("GET", "/wallet/users");
+
+// Materials
+const getMaterials = (category, search) =>
+  req("GET", `/materials/?${new URLSearchParams({...(category && {category}), ...(search && {search})})}`);
+
+const buyMaterial = (id) => req("POST", `/materials/${id}/buy`);
+const getLibrary = () => req("GET", "/materials/library");
+
+const uploadMaterial = (title, category, price, description, file) => {
+  const fd = new FormData();
+  fd.append("title", title); fd.append("category", category);
+  fd.append("price", price); fd.append("description", description);
+  fd.append("file", file);
+  return req("POST", "/materials/upload", fd, true);
+};
+
+// Admin
+const approveMaterial = (id) => req("PATCH", `/admin/materials/${id}/approve`);
+const rejectMaterial = (id) => req("PATCH", `/admin/materials/${id}/reject`);
+
+let currentUser = null;
+let pendingBuy = null;
+let uploadedFileName = '';
+
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',i===(tab==='login'?0:1));});
+  document.getElementById('auth-login-view').style.display = tab==='login'?'':'none';
+  document.getElementById('auth-reg-view').style.display = tab==='register'?'':'none';
+}
+
+function showErr(id,msg){
+  const el=document.getElementById(id);
+  el.innerHTML=`<div class="err-msg">⚠️ ${msg}</div>`;
+}
+
+async function doRegister(){
+  console.log('Trying to register...');
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if(!name||!email||!pass) return showErr('reg-err','All fields are required.');
+  if(pass.length<6) return showErr('reg-err','Password must be at least 6 characters.');
+  try {
+    const res = await fetch('http://127.0.0.1:8000/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, email, password: pass})
+    });
+    const data = await res.json();
+    if(!res.ok) return showErr('reg-err', data.detail || 'Registration failed');
+    localStorage.setItem('pc_token', data.token);
+    loginSuccess(data.user);
+  } catch(e) {
+    console.log('Error:', e);
+    showErr('reg-err', 'Cannot connect to server. Is the backend running?');
+  }
+}
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  try {
+    const res = await fetch('http://127.0.0.1:8000/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password: pass})
+    });
+    const data = await res.json();
+    if(!res.ok) return showErr('login-err', data.detail || 'Invalid email or password');
+    localStorage.setItem('pc_token', data.token);
+    loginSuccess(data.user);
+  } catch(e) {
+    showErr('login-err', 'Cannot connect to server. Is the backend running?');
+  }
+}
+
+function loginSuccess(u){
+  currentUser=u;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app-screen').style.display='block';
+  document.getElementById('sidebar-avatar').textContent=u.avatar;
+  document.getElementById('sidebar-uname').textContent=u.name.split(' ')[0];
+  document.getElementById('sidebar-urole').textContent=u.role;
+  if(u.role==='admin'){
+    document.getElementById('nav-admin').style.display='flex';
+    updateAdminBadge();
+  }
+  refreshBalance();
+  goPage('dashboard');
+}
+
+function doLogout(){
+  currentUser=null;
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-err').innerHTML='';
+  switchAuthTab('login');
+}
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+const PAGE_TITLES={
+  dashboard:'🏠 Dashboard',wallet:'💰 Wallet',
+  marketplace:'🛒 Marketplace',library:'📚 My Library',
+  profile:'👤 Profile',admin:'🛡️ Admin Panel'
+};
+
+function goPage(page){
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const navEl=document.getElementById('nav-'+page);
+  if(navEl) navEl.classList.add('active');
+  document.getElementById('topbar-title').textContent=PAGE_TITLES[page]||page;
+  const content=document.getElementById('page-content');
+  content.style.animation='none';
+  requestAnimationFrame(()=>{
+    content.style.animation='pageIn 0.35s ease both';
+    renderPage(page,content);
+  });
+}
+
+function renderPage(page,el){
+  switch(page){
+    case 'dashboard': renderDashboard(el); break;
+    case 'wallet': renderWallet(el); break;
+    case 'marketplace': renderMarketplace(el); break;
+    case 'library': renderLibrary(el); break;
+    case 'profile': renderProfile(el); break;
+    case 'admin': renderAdmin(el); break;
+  }
+}
+
+// ══════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard(el){
+  const myTxs=DB.transactions.filter(t=>t.userId===currentUser.id);
+  const approved=DB.materials.filter(m=>m.status==='approved');
+
+  el.innerHTML=`
+  <div class="stats-grid">
+    <div class="stat-card" data-icon="🪙">
+      <div class="stat-card-label">PesaCoin Balance</div>
+      <div class="stat-card-val val-gold font-clash">${currentUser.balance.toLocaleString()}</div>
+      <div class="stat-card-sub">PC · Your wallet</div>
+    </div>
+    <div class="stat-card" data-icon="📦">
+      <div class="stat-card-label">Materials Listed</div>
+      <div class="stat-card-val val-sky font-clash">${approved.length}</div>
+      <div class="stat-card-sub">in marketplace</div>
+    </div>
+    <div class="stat-card" data-icon="💸">
+      <div class="stat-card-label">My Transactions</div>
+      <div class="stat-card-val val-jade font-clash">${myTxs.length}</div>
+      <div class="stat-card-sub">total activity</div>
+    </div>
+    <div class="stat-card" data-icon="👥">
+      <div class="stat-card-label">Community</div>
+      <div class="stat-card-val val-amber font-clash">${DB.users.length}</div>
+      <div class="stat-card-sub">registered students</div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <div class="action-card market" onclick="goPage('marketplace')">
+      <div class="action-icon">🛒</div>
+      <div class="action-label">Browse Market</div>
+      <div class="action-sub">Buy study materials</div>
+    </div>
+    <div class="action-card send" onclick="openSend()">
+      <div class="action-icon">📤</div>
+      <div class="action-label">Send Coins</div>
+      <div class="action-sub">Transfer PesaCoins</div>
+    </div>
+    <div class="action-card receive" onclick="openReceive()">
+      <div class="action-icon">📥</div>
+      <div class="action-label">Receive Coins</div>
+      <div class="action-sub">Share your address</div>
+    </div>
+    <div class="action-card upload" onclick="openUpload()">
+      <div class="action-icon">📤</div>
+      <div class="action-label">Upload & Sell</div>
+      <div class="action-sub">Earn from resources</div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">Recent Transactions</div>
+        <div class="section-meta">${myTxs.length} records</div>
+      </div>
+      <div class="tx-list">
+        ${myTxs.length===0?`<div class="empty-state"><span class="empty-icon">💳</span>No transactions yet. Send or receive coins to get started!</div>`:
+          myTxs.slice(0,7).map(t=>txRowHTML(t)).join('')}
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div class="card">
+        <div class="card-title">⭐ Featured Materials</div>
+        ${approved.slice(0,4).map(m=>`
+          <div class="feat-item" onclick="openBuy(${m.id})">
+            <div class="feat-cover">${COVERS[m.category]||'📄'}</div>
+            <div class="feat-info">
+              <div class="feat-title">${m.title}</div>
+              <div class="feat-cat">${m.category}</div>
+            </div>
+            <div class="feat-price">${m.price} <span style="font-size:10px;color:var(--text-muted)">PC</span></div>
+          </div>
+        `).join('')}
+        <button class="btn btn-outline btn-sm" style="width:100%;margin-top:14px" onclick="goPage('marketplace')">View All →</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Platform Activity</div>
+        ${[
+          ['📦','Materials Sold',DB.materials.reduce((s,m)=>s+m.downloads,0)],
+          ['🎓','Active Students',DB.users.filter(u=>u.role==='student').length],
+          ['📈','Avg Price',`${Math.round(approved.reduce((s,m)=>s+m.price,0)/Math.max(1,approved.length))} PC`],
+        ].map(([icon,label,val])=>`
+          <div style="display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:20px;width:32px;text-align:center">${icon}</span>
+            <span style="flex:1;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim)">${label}</span>
+            <span style="font-weight:800;font-family:'JetBrains Mono',monospace;">${val}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function txRowHTML(tx){
+  const isIn=tx.type==='received';
+  const isBuy=tx.type==='purchase';
+  const cls=isIn?'tx-icon-in':isBuy?'tx-icon-buy':'tx-icon-out';
+  const icon=isIn?'⬇️':isBuy?'🛒':'⬆️';
+  const amtCls=isIn?'tx-amt-in':'tx-amt-out';
+  const sign=isIn?'+':'-';
+  return `<div class="tx-item">
+    <div class="tx-icon-wrap ${cls}">${icon}</div>
+    <div class="tx-desc">
+      <div class="tx-note">${tx.note||(isIn?`From ${tx.from}`:`To ${tx.to}`)}</div>
+      <div class="tx-date">${tx.date}</div>
+    </div>
+    <div class="tx-amt ${amtCls}">${sign}${tx.amount} PC</div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  WALLET
+// ══════════════════════════════════════════
+function renderWallet(el){
+  const myTxs=DB.transactions.filter(t=>t.userId===currentUser.id);
+  el.innerHTML=`
+  <div class="wallet-hero">
+    <div class="wallet-label">Total Balance</div>
+    <div class="wallet-balance font-clash">${currentUser.balance.toLocaleString()}</div>
+    <div class="wallet-bal-sub font-mono">${currentUser.email} · Joined ${currentUser.joined}</div>
+    <div class="wallet-btns">
+      <button class="btn btn-gold" onclick="openSend()">📤 Send Coins</button>
+      <button class="btn btn-ghost" onclick="openReceive()">📥 Receive Coins</button>
+      <button class="btn btn-ghost" onclick="openUpload()">📤 Upload & Sell</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-header">
+      <div class="section-title">Transaction History</div>
+      <div class="section-meta font-mono">${myTxs.length} records</div>
+    </div>
+    <div class="tx-list">
+      ${myTxs.length===0?`<div class="empty-state"><span class="empty-icon">💳</span>No transactions yet.</div>`:
+        myTxs.map(t=>txRowHTML(t)).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  MARKETPLACE
+// ══════════════════════════════════════════
+let mktFilter='All';
+let mktSearch='';
+
+function renderMarketplace(el){
+  const approved=DB.materials.filter(m=>m.status==='approved');
+  const cats=['All',...new Set(approved.map(m=>m.category))];
+  const myLib=DB.libraries[currentUser.id]||[];
+  const filtered=approved.filter(m=>
+    (mktFilter==='All'||m.category===mktFilter)&&
+    (m.title.toLowerCase().includes(mktSearch.toLowerCase())||
+     m.seller.toLowerCase().includes(mktSearch.toLowerCase()))
+  );
+
+  el.innerHTML=`
+  <div class="market-search">
+    <span class="search-icon">🔍</span>
+    <input placeholder="Search materials, sellers, topics..." value="${mktSearch}" oninput="mktSearch=this.value;renderPage('marketplace',document.getElementById('page-content'))"/>
+    ${mktSearch?`<span style="cursor:pointer;color:var(--text-muted)" onclick="mktSearch='';renderPage('marketplace',document.getElementById('page-content'))">✕</span>`:''}
+  </div>
+  <div class="filters">
+    ${cats.map(c=>`<div class="chip ${mktFilter===c?'active':''}" onclick="mktFilter='${c}';renderPage('marketplace',document.getElementById('page-content'))">${c}</div>`).join('')}
+  </div>
+  ${filtered.length===0?`<div class="empty-state"><span class="empty-icon">🔍</span>No materials found for your search.</div>`:`
+  <div class="materials-grid">
+    ${filtered.map(m=>{
+      const owned=myLib.includes(m.id);
+      const mine=m.sellerId===currentUser.id;
+      let btnHTML='';
+      if(owned) btnHTML=`<button class="btn btn-ghost btn-sm" disabled style="opacity:0.6">✅ Owned</button>`;
+      else if(mine) btnHTML=`<button class="btn btn-ghost btn-sm" disabled style="opacity:0.6">Yours</button>`;
+      else btnHTML=`<button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openBuy(${m.id})">Buy Now</button>`;
+      return `
+      <div class="mat-card" onclick="openBuy(${m.id})">
+        <div class="mat-cover">
+          <span style="font-size:56px">${COVERS[m.category]||'📄'}</span>
+          <div class="mat-badge">${m.category}</div>
+        </div>
+        <div class="mat-body">
+          <div class="mat-title">${m.title}</div>
+          <div class="mat-seller">by ${m.seller}</div>
+          <div class="mat-desc">${m.description}</div>
+          <div class="mat-footer">
+            <div>
+              <div class="mat-price">${m.price} <span>PC</span></div>
+              <div class="mat-dl">⬇ ${m.downloads} downloads</div>
+            </div>
+            ${btnHTML}
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`}`;
+}
+
+// ══════════════════════════════════════════
+//  LIBRARY
+// ══════════════════════════════════════════
+function renderLibrary(el){
+  const myLib=DB.libraries[currentUser.id]||[];
+  const items=DB.materials.filter(m=>myLib.includes(m.id));
+  el.innerHTML=items.length===0?`<div class="empty-state"><span class="empty-icon">📚</span>Your library is empty.<br><br><button class="btn btn-gold btn-sm" onclick="goPage('marketplace')">Browse Marketplace →</button></div>`:`
+  <div style="margin-bottom:22px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted)">
+    ${items.length} material${items.length!==1?'s':''} in your collection
+  </div>
+  <div class="library-grid">
+    ${items.map(m=>`
+    <div class="lib-card">
+      <div class="lib-icon">${COVERS[m.category]||'📄'}</div>
+      <div class="lib-title">${m.title}</div>
+      <div class="lib-meta">${m.category} · by ${m.seller}</div>
+      <div class="lib-actions">
+        <button class="btn btn-jade btn-sm" style="flex:1" onclick="alert('Opening \\'${m.title}\\' — In production, this opens the purchased PDF/document.')">📖 Open</button>
+        <button class="btn btn-ghost btn-xs" onclick="alert('Download functionality available in production.')">⬇</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  PROFILE
+// ══════════════════════════════════════════
+function renderProfile(el){
+  const myMats=DB.materials.filter(m=>m.sellerId===currentUser.id);
+  const myTxs=DB.transactions.filter(t=>t.userId===currentUser.id);
+  const earned=myTxs.filter(t=>t.type==='received'&&t.userId===currentUser.id).reduce((s,t)=>s+t.amount,0);
+  el.innerHTML=`
+  <div class="profile-hero">
+    <div class="profile-avatar-lg">${currentUser.avatar}</div>
+    <div class="profile-info">
+      <div class="profile-name">${currentUser.name}</div>
+      <div class="profile-email font-mono">${currentUser.email} · Joined ${currentUser.joined}</div>
+      <div class="profile-stats-row">
+        <div><div class="ps-val">${currentUser.balance}</div><div class="ps-label">PC BALANCE</div></div>
+        <div><div class="ps-val">${myMats.length}</div><div class="ps-label">UPLOADS</div></div>
+        <div><div class="ps-val">${earned}</div><div class="ps-label">PC EARNED</div></div>
+        <div><div class="ps-val">${myTxs.length}</div><div class="ps-label">TRANSACTIONS</div></div>
+      </div>
+    </div>
+    <div style="margin-left:auto">
+      <span class="badge ${currentUser.role==='admin'?'badge-gold':'badge-jade'}">${currentUser.role==='admin'?'🛡️ Admin':'🎓 Student'}</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-header"><div class="section-title">My Uploads</div></div>
+    ${myMats.length===0?`<div class="empty-state"><span class="empty-icon">📤</span>No uploads yet. Share your knowledge!</div>`:`
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Material</th><th>Category</th><th>Price</th><th>Status</th><th>Downloads</th></tr></thead>
+      <tbody>
+        ${myMats.map(m=>`
+        <tr>
+          <td style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">${COVERS[m.category]||'📄'}</span><strong>${m.title}</strong></td>
+          <td><span class="font-mono" style="font-size:11px;color:var(--text-muted)">${m.category}</span></td>
+          <td><span class="font-mono" style="color:var(--gold-light)">${m.price} PC</span></td>
+          <td><span class="badge ${m.status==='approved'?'badge-jade':m.status==='rejected'?'badge-crimson':'badge-gold'}">${m.status}</span></td>
+          <td><span class="font-mono">${m.downloads}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`}
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  ADMIN
+// ══════════════════════════════════════════
+let adminTab='pending';
+
+function renderAdmin(el){
+  const pending=DB.materials.filter(m=>m.status==='pending');
+  el.innerHTML=`
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card" data-icon="⏳">
+      <div class="stat-card-label">Pending Review</div>
+      <div class="stat-card-val val-gold font-clash">${pending.length}</div>
+    </div>
+    <div class="stat-card" data-icon="👥">
+      <div class="stat-card-label">Total Users</div>
+      <div class="stat-card-val val-sky font-clash">${DB.users.length}</div>
+    </div>
+    <div class="stat-card" data-icon="📚">
+      <div class="stat-card-label">All Materials</div>
+      <div class="stat-card-val val-jade font-clash">${DB.materials.length}</div>
+    </div>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab ${adminTab==='pending'?'active':''}" onclick="adminTab='pending';renderPage('admin',document.getElementById('page-content'))">⏳ Pending (${pending.length})</div>
+    <div class="admin-tab ${adminTab==='materials'?'active':''}" onclick="adminTab='materials';renderPage('admin',document.getElementById('page-content'))">📦 All Materials</div>
+    <div class="admin-tab ${adminTab==='users'?'active':''}" onclick="adminTab='users';renderPage('admin',document.getElementById('page-content'))">👥 Users</div>
+  </div>
+  <div class="card">
+    ${adminTab==='pending'?renderAdminPending(pending):adminTab==='materials'?renderAdminMaterials():renderAdminUsers()}
+  </div>`;
+}
+
+function renderAdminPending(pending){
+  if(pending.length===0) return `<div class="empty-state"><span class="empty-icon">✅</span>All caught up! No pending reviews.</div>`;
+  return `<div style="overflow-x:auto"><table>
+    <thead><tr><th>Material</th><th>Seller</th><th>Price</th><th>Uploaded</th><th>Actions</th></tr></thead>
+    <tbody>${pending.map(m=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">${COVERS[m.category]||'📄'}</span><div><strong>${m.title}</strong><div class="font-mono" style="font-size:10px;color:var(--text-muted)">${m.category}</div></div></div></td>
+      <td class="font-mono" style="font-size:12px;color:var(--text-dim)">${m.seller}</td>
+      <td class="font-mono" style="color:var(--gold-light)">${m.price} PC</td>
+      <td class="font-mono" style="font-size:11px;color:var(--text-muted)">${m.uploadDate}</td>
+      <td><div style="display:flex;gap:8px">
+        <button class="btn btn-jade btn-xs" onclick="adminApprove(${m.id})">✅ Approve</button>
+        <button class="btn btn-crimson btn-xs" onclick="adminReject(${m.id})">✕ Reject</button>
+      </div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderAdminMaterials(){
+  return `<div style="overflow-x:auto"><table>
+    <thead><tr><th>Title</th><th>Seller</th><th>Category</th><th>Price</th><th>Status</th><th>Downloads</th></tr></thead>
+    <tbody>${DB.materials.map(m=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">${COVERS[m.category]||'📄'}</span><strong>${m.title}</strong></div></td>
+      <td class="font-mono" style="font-size:12px;color:var(--text-dim)">${m.seller}</td>
+      <td class="font-mono" style="font-size:11px;color:var(--text-muted)">${m.category}</td>
+      <td class="font-mono" style="color:var(--gold-light)">${m.price} PC</td>
+      <td><span class="badge ${m.status==='approved'?'badge-jade':m.status==='rejected'?'badge-crimson':'badge-gold'}">${m.status}</span></td>
+      <td class="font-mono">${m.downloads}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderAdminUsers(){
+  return `<div style="overflow-x:auto"><table>
+    <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Balance</th><th>Joined</th></tr></thead>
+    <tbody>${DB.users.map(u=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:12px">
+        <div style="width:34px;height:34px;background:linear-gradient(135deg,var(--gold-light),var(--gold));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#000">${u.avatar}</div>
+        <strong>${u.name}</strong>
+      </div></td>
+      <td class="font-mono" style="font-size:12px;color:var(--text-dim)">${u.email}</td>
+      <td><span class="badge ${u.role==='admin'?'badge-gold':'badge-jade'}">${u.role}</span></td>
+      <td class="font-mono" style="color:var(--gold-light)">${u.balance} PC</td>
+      <td class="font-mono" style="font-size:11px;color:var(--text-muted)">${u.joined}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function adminApprove(id){
+  const m=DB.materials.find(m=>m.id===id);
+  if(m){m.status='approved';updateAdminBadge();showToast(`✅ "${m.title}" approved!`,'s');}
+  renderPage('admin',document.getElementById('page-content'));
+}
+function adminReject(id){
+  const m=DB.materials.find(m=>m.id===id);
+  if(m){m.status='rejected';updateAdminBadge();showToast(`Material rejected.`,'e');}
+  renderPage('admin',document.getElementById('page-content'));
+}
+function updateAdminBadge(){
+  const n=DB.materials.filter(m=>m.status==='pending').length;
+  const b=document.getElementById('admin-badge');
+  if(b){b.style.display=n>0?'':'none';b.textContent=n;}
+}
+
+// ══════════════════════════════════════════
+//  MODALS
+// ══════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function openSend(){
+  const students=DB.users.filter(u=>u.id!==currentUser.id&&u.role!=='admin');
+  document.getElementById('send-to').innerHTML=`<option value="">Select recipient...</option>`+
+    students.map(u=>`<option value="${u.id}">${u.name} (${u.balance} PC)</option>`).join('');
+  document.getElementById('send-amount').value='';
+  document.getElementById('send-note').value='';
+  document.getElementById('send-err').innerHTML='';
+  document.getElementById('send-after').textContent='— PC';
+  document.getElementById('send-amount').oninput=function(){
+    const amt=parseInt(this.value)||0;
+    const after=currentUser.balance-amt;
+    const el=document.getElementById('send-after');
+    el.textContent=after+' PC';
+    el.className='info-row-val '+(after>=0?'val-jade':'val-amber');
+  };
+  openModal('modal-send');
+}
+
+function doSend(){
+  const toId=parseInt(document.getElementById('send-to').value);
+  const amt=parseInt(document.getElementById('send-amount').value);
+  const note=document.getElementById('send-note').value.trim();
+  const recipient=DB.users.find(u=>u.id===toId);
+  if(!recipient) return showErr('send-err','Please select a recipient.');
+  if(!amt||amt<=0) return showErr('send-err','Enter a valid amount.');
+  if(amt>currentUser.balance) return showErr('send-err','Insufficient PesaCoin balance.');
+  currentUser.balance-=amt;
+  DB.users.find(u=>u.id===currentUser.id).balance=currentUser.balance;
+  recipient.balance+=amt;
+  const now=new Date().toISOString().split('T')[0];
+  DB.transactions.unshift({id:Date.now(),type:'sent',from:currentUser.name,to:recipient.name,amount:amt,note:note||`Sent to ${recipient.name}`,date:now,userId:currentUser.id});
+  DB.transactions.unshift({id:Date.now()+1,type:'received',from:currentUser.name,to:recipient.name,amount:amt,note:note||`From ${currentUser.name}`,date:now,userId:recipient.id});
+  refreshBalance();
+  closeModal('modal-send');
+  showToast(`✅ Sent ${amt} PC to ${recipient.name}!`,'s');
+}
+
+function openReceive(){
+  const addr=`PC-${String(currentUser.id).padStart(6,'0')}-${currentUser.name.replace(/\s/g,'').toUpperCase().slice(0,4)}`;
+  document.getElementById('receive-addr').textContent=addr;
+  openModal('modal-receive');
+}
+function copyAddr(){
+  const addr=document.getElementById('receive-addr').textContent;
+  navigator.clipboard.writeText(addr).then(()=>showToast('📋 Address copied to clipboard!','i'));
+}
+
+function openUpload(){
+  document.getElementById('ul-title').value='';
+  document.getElementById('ul-price').value='';
+  document.getElementById('ul-desc').value='';
+  document.getElementById('upload-err').innerHTML='';
+  uploadedFileName='';
+  document.getElementById('upload-zone').innerHTML=`<span class="upload-zone-icon">📁</span><span id="upload-zone-text">Click to select file (PDF, DOCX, PPTX)</span>`;
+  openModal('modal-upload');
+}
+function simulateUpload(){
+  const names=['lecture_notes.pdf','study_guide.pdf','revision.docx','complete_notes.pptx'];
+  uploadedFileName=names[Math.floor(Math.random()*names.length)];
+  document.getElementById('upload-zone').innerHTML=`<span class="upload-zone-icon">✅</span><strong style="color:var(--jade)">${uploadedFileName}</strong><br><span style="font-size:10px;color:var(--text-muted)">Click to change file</span>`;
+}
+function doUpload(){
+  const title=document.getElementById('ul-title').value.trim();
+  const cat=document.getElementById('ul-cat').value;
+  const price=parseInt(document.getElementById('ul-price').value);
+  const desc=document.getElementById('ul-desc').value.trim();
+  if(!title||!price||!desc) return showErr('upload-err','Please fill all required fields.');
+  if(price<1) return showErr('upload-err','Price must be at least 1 PC.');
+  DB.materials.push({
+    id:Date.now(),title,seller:currentUser.name,sellerId:currentUser.id,
+    price,category:cat,description:desc,status:'pending',downloads:0,
+    uploadDate:new Date().toISOString().split('T')[0]
+  });
+  if(currentUser.role==='admin') updateAdminBadge();
+  closeModal('modal-upload');
+  showToast('📤 Material submitted for review!','i');
+}
+
+let buyMatId=null;
+function openBuy(id){
+  const m=DB.materials.find(m=>m.id===id);
+  if(!m) return;
+  const myLib=DB.libraries[currentUser.id]||[];
+  if(myLib.includes(id)){return showToast('Already in your library!','i');}
+  if(m.sellerId===currentUser.id){return showToast("You can't buy your own material!",'e');}
+  buyMatId=id;
+  const after=currentUser.balance-m.price;
+  document.getElementById('buy-mat-preview').innerHTML=`
+    <span style="font-size:40px">${COVERS[m.category]||'📄'}</span>
+    <div><div style="font-weight:800;font-size:16px">${m.title}</div><div class="font-mono" style="font-size:11px;color:var(--text-muted)">by ${m.seller} · ${m.category}</div></div>`;
+  document.getElementById('buy-price-display').textContent=m.price+' PC';
+  document.getElementById('buy-curr-bal').textContent=currentUser.balance+' PC';
+  const afterEl=document.getElementById('buy-after-bal');
+  afterEl.textContent=after+' PC';
+  afterEl.className='info-row-val '+(after>=0?'val-jade':'val-amber');
+  document.getElementById('buy-err').innerHTML='';
+  const btn=document.getElementById('buy-confirm-btn');
+  if(after<0){
+    btn.disabled=true;btn.style.opacity='0.5';
+    showErr('buy-err','Insufficient PesaCoins. Top up your wallet.');
+  } else {btn.disabled=false;btn.style.opacity='1';}
+  openModal('modal-buy');
+}
+
+function confirmBuy(){
+  const m=DB.materials.find(m=>m.id===buyMatId);
+  if(!m) return;
+  currentUser.balance-=m.price;
+  DB.users.find(u=>u.id===currentUser.id).balance=currentUser.balance;
+  const seller=DB.users.find(u=>u.id===m.sellerId);
+  if(seller) seller.balance+=m.price;
+  m.downloads++;
+  if(!DB.libraries[currentUser.id]) DB.libraries[currentUser.id]=[];
+  DB.libraries[currentUser.id].push(m.id);
+  const now=new Date().toISOString().split('T')[0];
+  DB.transactions.unshift({id:Date.now(),type:'purchase',from:currentUser.name,to:m.seller,amount:m.price,note:`Bought: ${m.title}`,date:now,userId:currentUser.id});
+  if(seller) DB.transactions.unshift({id:Date.now()+1,type:'received',from:currentUser.name,to:seller.name,amount:m.price,note:`Sale: ${m.title}`,date:now,userId:seller.id});
+  refreshBalance();
+  closeModal('modal-buy');
+  showToast(`📚 Purchased "${m.title}"!`,'s');
+  renderPage('marketplace',document.getElementById('page-content'));
+}
+
+// ══════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════
+function refreshBalance(){
+  document.getElementById('topbar-bal').textContent=currentUser.balance.toLocaleString();
+}
+
+function showErr(id,msg){
+  document.getElementById(id).innerHTML=`<div class="err-msg">⚠️ ${msg}</div>`;
+}
+
+function showToast(msg,type='s'){
+  const icons={s:'✅',e:'❌',i:'💡'};
+  const div=document.createElement('div');
+  div.className=`toast toast-${type}`;
+  div.innerHTML=`<span class="toast-icon">${icons[type]||'💡'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(div);
+  setTimeout(()=>{div.style.opacity='0';div.style.transform='translateX(20px)';div.style.transition='all 0.3s';setTimeout(()=>div.remove(),300);},3200);
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(ov=>{
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+});
+</script>
+</body>
+</html>
