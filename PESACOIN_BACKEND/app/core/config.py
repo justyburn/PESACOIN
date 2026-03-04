@@ -1,7 +1,8 @@
 from pydantic_settings import BaseSettings
+from pydantic import Field
 
 class Settings(BaseSettings):
-    MONGO_URI: str
+    MONGO_URI: str = Field(validation_alias="MONGODB_URI")
     DB_NAME: str = "pesacoin"
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
