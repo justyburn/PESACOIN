@@ -1,0 +1,17 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Uploads or user-generated files
+uploads/
+
+# VS Code settings
+.vscode/
+
+# Node / frontend stuff (if any)
+node_modules/
+dist/
+build/
